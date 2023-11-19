@@ -36,7 +36,6 @@ const EditExercise = () => {
       duration: formData.duration,
       date: formData.date,
     };
-    console.log(exercise);
 
     try {
       const response = await axios.patch(
@@ -90,6 +89,7 @@ const EditExercise = () => {
             description: exerciseDetails.description,
             duration: exerciseDetails.duration,
             date: new Date(exerciseDetails.date),
+            users: [],
           });
         }
       } catch (err) {
@@ -113,7 +113,6 @@ const EditExercise = () => {
             setFormData((prevState) => ({
               ...prevState,
               users: response.data.map((user) => user.username),
-              username: response.data[0].username,
             }));
           }
         }

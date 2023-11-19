@@ -34,7 +34,6 @@ const CreateExercise = () => {
       duration: formData.duration,
       date: formData.date,
     };
-    console.log(exercise);
     try {
       const response = await axios.post(
         "http://localhost:5050/exercise/add",

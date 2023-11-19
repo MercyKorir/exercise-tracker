@@ -18,12 +18,11 @@ const CreateUser = () => {
     const newUser = {
       username: formData.username,
     };
-    console.log(newUser);
 
     try {
       const response = await axios.post(
         "http://localhost:5050/user/signup",
-        formData,
+        newUser,
         {
           headers: {
             "Content-Type": "application/json",
