@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
+import axios from "axios";
 
 const CreateExercise = () => {
   const [formData, setFormData] = useState({
@@ -24,7 +25,7 @@ const CreateExercise = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const exercise = {
       username: formData.username,
@@ -33,21 +34,62 @@ const CreateExercise = () => {
       date: formData.date,
     };
     console.log(exercise);
-    setFormData({
-      ...formData,
-      username: "",
-      description: "",
-      duration: 0,
-      date: new Date(),
-    });
+    try {
+      const response = await axios.post(
+        "http://localhost:5050/exercise/add",
+        exercise,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      if (response.status === 201) {
+        alert("Exercise created successfully");
+        setFormData({
+          ...formData,
+          username: "",
+          description: "",
+          duration: 0,
+          date: new Date(),
+        });
+      } else {
+        alert("Error creating exercise");
+      }
+    } catch (err) {
+      console.error("Error creating exercise: ", err);
+      alert("Error creating exercise");
+    }
   };
 
   useEffect(() => {
-    setFormData((prevData) => ({
-      ...prevData,
-      users: ["test user", "test user 2"],
-      username: "test user",
-    }));
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get("http://localhost:5050/user/", {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        });
+        if (response.status === 200) {
+          if (response.data.length === 0) {
+            alert("No users found. Please create a user first.");
+            window.location = "/user";
+          } else {
+            setFormData({
+              ...formData,
+              users: response.data.map((user) => user.username),
+              username: response.data[0].username,
+            });
+          }
+        }
+      } catch (err) {
+        console.error("Error fetching users: ", err);
+      }
+    };
+
+    fetchUsers();
   }, []);
 
   return (
