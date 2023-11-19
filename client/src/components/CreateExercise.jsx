@@ -33,6 +33,13 @@ const CreateExercise = () => {
       date: formData.date,
     };
     console.log(exercise);
+    setFormData({
+      ...formData,
+      username: "",
+      description: "",
+      duration: 0,
+      date: new Date(),
+    });
   };
 
   useEffect(() => {
