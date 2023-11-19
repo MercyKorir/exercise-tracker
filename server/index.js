@@ -8,7 +8,13 @@ import exercises from './routes/exercise.js';
 const app = express();
 const port = process.env.PORT || 5050;
 
-app.use(cors());
+app.use(
+  cors({
+    origin: ['http://localhost:3000'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    credentials: true,
+  }),
+);
 app.use(express.json());
 
 connectToDB();
